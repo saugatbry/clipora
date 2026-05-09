@@ -25,9 +25,10 @@ export const getMetadata = async (url: string): Promise<VideoMetadata> => {
         'referer:youtube.com',
         'user-agent:Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
       ]
-    });
+    } as any);
 
-    const data = JSON.parse(output as string);
+    const data = JSON.parse(JSON.stringify(output));
+
 
     return {
       id: data.id,
