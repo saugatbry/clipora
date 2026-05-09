@@ -20,29 +20,23 @@ export default function Downloader() {
     setMetadata(null);
 
     try {
-      // Simulate API call for now since backend is not running locally
-      // In production: const res = await axios.post('/api/fetch-metadata', { url });
-      
-      setTimeout(() => {
-        setMetadata({
-          id: "dQw4w9WgXcQ",
-          title: "Rick Astley - Never Gonna Give You Up (Official Music Video)",
-          thumbnail: "https://i.ytimg.com/vi/dQw4w9WgXcQ/maxresdefault.jpg",
-          duration: "3:33",
-          uploader: "Rick Astley",
-          formats: [
-            { quality: "1080p", label: "MP4 1080p", type: "video" },
-            { quality: "720p", label: "MP4 720p", type: "video" },
-            { quality: "360p", label: "MP4 360p", type: "video" },
-            { quality: "audio", label: "MP3 320kbps", type: "audio" },
-          ]
-        });
-        setLoading(false);
-      }, 1500);
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+      const response = await fetch(`${apiUrl}/fetch-metadata`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url })
+      });
+
+      if (!response.ok) throw new Error('Failed to fetch');
+
+      const data = await response.json();
+      setMetadata(data);
+      setLoading(false);
     } catch (err) {
       setError("Could not fetch video details. Please check the URL.");
       setLoading(false);
     }
+
   };
 
   // Clipboard auto-detect

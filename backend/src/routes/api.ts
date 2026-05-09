@@ -3,7 +3,12 @@ import { getMetadata } from '../services/yt-dlp';
 
 const router = Router();
 
+router.get('/', (req, res) => {
+  res.json({ message: 'Clipora API is active. Use POST /fetch-metadata or POST /download.' });
+});
+
 router.post('/fetch-metadata', async (req, res) => {
+
   const { url } = req.body;
 
   if (!url) {
